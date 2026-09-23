@@ -13,9 +13,9 @@ export default function BookingPage() {
   // Selection states
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedProfessional, setSelectedProfessional] = useState<{ id: string; name: string; role: string }>({
-    id: 'heber',
-    name: 'Heber',
-    role: 'Barbero Principal',
+    id: 'equipo-ml',
+    name: 'Especialista ML',
+    role: 'Estilista / Nail Artist',
   });
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split('T')[0]
@@ -49,9 +49,9 @@ export default function BookingPage() {
         if (bInfo) {
           setBusinessInfo(bInfo);
           setSelectedProfessional({
-            id: 'heber',
-            name: bInfo.barber_name || 'Heber',
-            role: 'Barbero Principal',
+            id: 'equipo-ml',
+            name: 'Especialista ML',
+            role: 'Estilista / Nail Artist',
           });
         }
       } catch (err: any) {
@@ -131,7 +131,7 @@ export default function BookingPage() {
   };
 
   const professionals = [
-    { id: 'heber', name: businessInfo?.barber_name || 'Heber', role: 'Barbero Principal & Especialista' },
+    { id: 'equipo-ml', name: 'Especialista ML', role: 'Estilista & Nail Artist Especialista' },
   ];
 
   return (
@@ -140,7 +140,7 @@ export default function BookingPage() {
       <header className="bg-[#38312d] text-white py-6 px-6 shadow-md">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <a href="/" className="font-serif text-2xl tracking-tight">
-            +58 BarberStudio<span className="text-[#c57d62]">.</span>
+            ML Mimo Mento Nails Studio<span className="text-[#c57d62]">.</span>
           </a>
           <a
             href="/gestionar"
@@ -155,9 +155,7 @@ export default function BookingPage() {
         <div className="mb-8">
           <h1 className="font-serif text-4xl font-bold mb-2">Reservar Cita</h1>
           <p className="text-zinc-600 text-sm">
-            {businessInfo
-              ? `${businessInfo.name} - Profesional: ${selectedProfessional.name}`
-              : '+58 BarberStudio'}
+            ML Mimo Mento Nails Studio
           </p>
         </div>
 
@@ -478,7 +476,7 @@ export default function BookingPage() {
             <CheckCircle className="size-16 text-emerald-600 mx-auto mb-4" />
             <h2 className="font-serif text-3xl font-bold mb-2">¡Reserva Confirmada!</h2>
             <p className="text-zinc-600 text-sm mb-6">
-              Tu cita se ha registrado con éxito. Te esperamos en +58 BarberStudio con {selectedProfessional.name}.
+              Tu cita se ha registrado con éxito. Te esperamos en ML Mimo Mento Nails Studio con {selectedProfessional.name}.
             </p>
 
             <div className="bg-[#faf8f6] p-6 border border-zinc-200 text-left max-w-md mx-auto mb-8 space-y-3 text-sm">

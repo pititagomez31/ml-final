@@ -105,7 +105,7 @@ export default function ManageBookingPage() {
       <header className="bg-[#38312d] text-white py-6 px-6 shadow-md">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <a href="/" className="font-serif text-2xl tracking-tight">
-            +58 BarberStudio<span className="text-[#c57d62]">.</span>
+            ML Mimo Mento Nails Studio<span className="text-[#c57d62]">.</span>
           </a>
           <a
             href="/reservar"

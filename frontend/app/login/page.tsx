@@ -41,8 +41,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#faf8f6] text-zinc-900 flex flex-col justify-center items-center px-6">
       <div className="w-full max-w-md bg-white border border-zinc-200 p-8 shadow-sm">
         <div className="text-center mb-8">
-          <a href="/" className="font-serif text-3xl font-bold tracking-tight inline-block mb-2">
-            +58 BarberStudio<span className="text-[#c57d62]">.</span>
+          <a href="/" className="font-serif text-2xl font-bold tracking-tight inline-block mb-2">
+            ML Mimo Mento Nails Studio<span className="text-[#c57d62]">.</span>
           </a>
           <p className="text-xs uppercase tracking-widest text-zinc-500 font-medium">
             Acceso Administrativo
@@ -68,7 +68,7 @@ export default function LoginPage() {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="+58BarberStudio"
+                placeholder="Usuario de administración"
                 className="w-full pl-10 p-3 border border-zinc-300 focus:outline-none focus:border-[#c57d62] text-sm"
               />
             </div>

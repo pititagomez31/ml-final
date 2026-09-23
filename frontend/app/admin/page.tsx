@@ -324,7 +324,7 @@ export default function AdminDashboardPage() {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <span className="font-serif text-2xl tracking-tight">
-              +58 BarberStudio<span className="text-[#c57d62]">.</span>
+              ML Mimo Mento Nails Studio<span className="text-[#c57d62]">.</span>
             </span>
             <span className="text-xs bg-[#c57d62] px-2.5 py-0.5 rounded font-semibold uppercase tracking-wider">
               Admin

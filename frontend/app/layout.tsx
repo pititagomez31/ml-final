@@ -3,8 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Luxe Beauty Spa | Nail Art & Aesthetic Treatment Center',
-  description: 'Premium beauty spa specializing in luxury nail services and personalized aesthetic treatments. Discover your beauty sanctuary.',
+  title: 'ML Mimo Mento Nails Studio | Reserva tu Cita',
+  description: 'Estudio de uñas especializado en manicura, pedicura y tratamiento de uñas en Santa Cruz de Tenerife.',
   generator: 'v0.app',
   icons: {
     icon: [
