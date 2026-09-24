@@ -43,7 +43,7 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-app = FastAPI(title="+58 BarberStudio API")
+app = FastAPI(title="ML Mimo Mento Nails Studio API")
 api = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -176,28 +176,53 @@ def fmt_hhmm(mins: int) -> str:
     return f"{mins // 60:02d}:{mins % 60:02d}"
 
 DEFAULT_WORKING_HOURS = {
-    "0": {"enabled": True,  "start": "10:00", "end": "20:00"},  # Mon
-    "1": {"enabled": True,  "start": "10:00", "end": "20:00"},
-    "2": {"enabled": True,  "start": "10:00", "end": "20:00"},
-    "3": {"enabled": True,  "start": "10:00", "end": "20:00"},
-    "4": {"enabled": True,  "start": "10:00", "end": "21:00"},
-    "5": {"enabled": True,  "start": "10:00", "end": "18:00"},
-    "6": {"enabled": False, "start": "10:00", "end": "14:00"},  # Sun
+    "0": {"enabled": True, "start": "09:00", "end": "19:00"},  # Lunes
+    "1": {"enabled": True, "start": "09:00", "end": "19:00"},  # Martes
+    "2": {"enabled": True, "start": "09:00", "end": "19:00"},  # Miércoles
+    "3": {"enabled": True, "start": "09:00", "end": "19:00"},  # Jueves
+    "4": {"enabled": True, "start": "09:00", "end": "19:00"},  # Viernes
+    "5": {"enabled": False, "start": "09:00", "end": "19:00"}, # Sábado
+    "6": {"enabled": False, "start": "09:00", "end": "19:00"}, # Domingo
 }
 
 DEFAULT_LUNCH = {"enabled": True, "start": "13:00", "end": "14:00"}
 
 DEFAULT_SERVICES = [
-    {"name": "Solo Corte", "description": "", "price_eur": 0.0, "duration_min": 35, "active": True},
-    {"name": "Corte y Barba", "description": "", "price_eur": 0.0, "duration_min": 50, "active": True},
-    {"name": "Corte, Barba y Cejas", "description": "", "price_eur": 0.0, "duration_min": 60, "active": True},
-    {"name": "Corte y Cejas", "description": "", "price_eur": 0.0, "duration_min": 40, "active": True},
-    {"name": "Solo Arreglo de Barba", "description": "", "price_eur": 0.0, "duration_min": 15, "active": True},
-    {"name": "Perfilado de Cejas", "description": "", "price_eur": 0.0, "duration_min": 10, "active": True},
+    {"name": "Manicure tradicional", "description": "", "price_eur": 25.0, "duration_min": 30, "active": True},
+    {"name": "Manicure semipermanente", "description": "", "price_eur": 30.0, "duration_min": 60, "active": True},
+    {"name": "Manicure semipermanente + refuerzo", "description": "", "price_eur": 35.0, "duration_min": 90, "active": True},
+    {"name": "Manicure semipermanente + nivelación", "description": "", "price_eur": 35.0, "duration_min": 90, "active": True},
+    {"name": "Retirada semipermanente", "description": "", "price_eur": 8.0, "duration_min": 15, "active": True},
+    {"name": "Puesta gel/acrílico/polygel", "description": "", "price_eur": 50.0, "duration_min": 150, "active": True},
+    {"name": "Mantenimiento gel/acrílico/polygel", "description": "", "price_eur": 40.0, "duration_min": 120, "active": True},
+    {"name": "Retirada gel/acrílico", "description": "", "price_eur": 15.0, "duration_min": 25, "active": True},
+    {"name": "Arreglo uña semipermanente", "description": "", "price_eur": 2.0, "duration_min": 10, "active": True},
+    {"name": "Arreglo uña gel/polygel", "description": "", "price_eur": 3.0, "duration_min": 10, "active": True},
+    {"name": "Pedicure tradicional", "description": "", "price_eur": 28.0, "duration_min": 60, "active": True},
+    {"name": "Pedicure tradicional SPA", "description": "", "price_eur": 30.0, "duration_min": 60, "active": True},
+    {"name": "Pedicure semipermanente", "description": "", "price_eur": 30.0, "duration_min": 60, "active": True},
+    {"name": "Pedicure semipermanente SPA", "description": "", "price_eur": 35.0, "duration_min": 60, "active": True},
+    {"name": "Gel X", "description": "", "price_eur": 50.0, "duration_min": 120, "active": True},
 ]
 
 
 # --- Auth endpoints ---
+@api.post("/setup-admin")
+async def setup_admin():
+    existing = await db.users.find_one({"username": ADMIN_USER})
+    if existing:
+        return {"ok": True, "message": "Admin ya existe"}
+    doc = {
+        "id": new_id(),
+        "username": ADMIN_USER,
+        "email": ADMIN_EMAIL,
+        "role": "admin",
+        "password_hash": hash_pw(ADMIN_PASSWORD),
+        "created_at": now_iso(),
+    }
+    await db.users.insert_one(doc)
+    return {"ok": True, "message": f"Admin {ADMIN_USER} creado"}
+
 @api.post("/auth/login")
 async def login(body: LoginIn):
     user = await db.users.find_one({"username": body.username.strip()})
@@ -686,7 +711,7 @@ async def delete_client(cid: str, admin=Depends(get_current_admin)):
 
 # --- Confirmación y recordatorios ---
 def _reminder_msg(a: dict) -> str:
-    return f"¡Hola {a['client_name']}! Mañana te espero en +58 BarberStudio a las {a['start']}. Código: {a['id'][:8]}"
+    return f"¡Hola {a['client_name']}! Mañana te esperamos en ML Mimo Mento Nails Studio a las {a['start']}. Código: {a['id'][:8]}"
 
 @api.post("/appointments/{aid}/confirmar")
 async def confirmar_cita(aid: str, admin=Depends(get_current_admin)):
@@ -707,7 +732,7 @@ async def recordatorio_send(aid: str, admin=Depends(get_current_admin)):
 
 
 # --- Email ---
-EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "+58 BarberStudio")
+EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "ML Mimo Mento Nails Studio")
 EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO")
 
 _SHORTENERS = ("bit.ly", "tinyurl.com", "t.co", "is.gd", "cutt.ly", "goo.gl", "rebrand.ly")
@@ -717,7 +742,7 @@ _HOSTISH = re.compile(r"\b(?:https?://)?((?:[a-z0-9-]+\.)+[a-z]{2,})", re.I)
 
 def _host_ok(host: str) -> bool:
     """Whitelist of trusted domains."""
-    trusted = ("58barberstudio.com", "google.com", "github.com", "railway.app", "emergentagent.com")
+    trusted = ("google.com", "github.com", "railway.app", "emergentagent.com")
     return any(host.endswith(t) for t in trusted)
 
 def _same_site(shown: str, real: str) -> bool:
@@ -848,7 +873,7 @@ async def send_reminders(request: Request, background: BackgroundTasks):
 
 
 # --- Backup ---
-BACKUP_EMAIL_TO = os.environ.get("BACKUP_EMAIL_TO", "info@58barberstudio.com")
+BACKUP_EMAIL_TO = os.environ.get("BACKUP_EMAIL_TO", "")
 SMTP_HOST = os.environ.get("SMTP_HOST", "")
 SMTP_PORT = int(os.environ.get("SMTP_PORT", "465"))
 SMTP_USER = os.environ.get("SMTP_USER", "")
@@ -966,16 +991,19 @@ async def cron_backup(request: Request, background: BackgroundTasks):
 @api.get("/business")
 async def business_info():
     return {
-        "name": "+58 BarberStudio",
-        "phone": "+34922 252 090",
-        "whatsapp": "+34664 345 827",
-        "address": "Avenida de Los Majuelos 51C, 38008, Taco, Santa Cruz de Tenerife",
-        "barber_name": "Heber",
+        "name": "ML Mimo Mento Nails Studio",
+        "phone": "",
+        "whatsapp": "",
+        "address": "Calle Pedro Guezala, 3, Local A 1, 38007 Santa Cruz de Tenerife",
+        "barber_name": "",
+        "instagram": "https://www.instagram.com/dlmimomentonailsstudio",
+        "facebook": "https://www.facebook.com/share/1CZHzac66L/",
+        "google_maps": "https://maps.app.goo.gl/whP5H8hSTnxkyDSb6",
     }
 
 @api.get("/")
 async def root():
-    return {"message": "+58 BarberStudio API"}
+    return {"message": "ML Mimo Mento Nails Studio API"}
 
 
 # --- WhatsApp ---
@@ -1068,7 +1096,7 @@ async def gestionar_opt_out(de_telefono: str, baja: bool) -> None:
 AUTOREPLY_MSG = (
     "¡Hola! Gracias por tu mensaje. En breve nos pondremos en contacto contigo. "
     "Si tienes una cita, puedes modificarla o cancelarla aquí: "
-    "https://www.58barberstudio.com/reservar#gestionar"
+    "https://bountiful-harmony-production-3054.up.railway.app/gestionar"
 )
 
 async def autoresponder_cliente(de_telefono: str) -> None:
@@ -1096,7 +1124,7 @@ async def whatsapp_webhook_log(admin=Depends(get_current_admin)):
 # --- App lifecycle ---
 @api.get("/app")
 async def app_root():
-    return {"message": "+58 BarberStudio"}
+    return {"message": "ML Mimo Mento Nails Studio"}
 
 async def _recordatorios_scheduler():
     """Lanza run_recordatorios() todos los días a las 18:00 (Atlantic/Canary),
@@ -1125,6 +1153,26 @@ async def on_start():
     await db.appointments.create_index("client_phone")
     await db.services.create_index("id", unique=True)
     await db.users.create_index("username", unique=True)
+
+    # Auto-seed de servicios si la colección está vacía
+    svc_count = await db.services.count_documents({})
+    if svc_count == 0:
+        logger.info("Base de datos vacía: insertando %d servicios por defecto", len(DEFAULT_SERVICES))
+        for svc in DEFAULT_SERVICES:
+            await db.services.insert_one({"id": new_id(), **svc})
+        logger.info("Servicios insertados correctamente")
+
+    # Auto-seed de horario base si no existe
+    wh = await db.working_hours.find_one({"id": "default"})
+    if not wh:
+        logger.info("Insertando horario base por defecto")
+        await db.working_hours.insert_one({
+            "id": "default",
+            "days": DEFAULT_WORKING_HOURS,
+            "lunch": {"enabled": False, "start": "13:00", "end": "14:00"},
+            "updated_at": now_iso(),
+        })
+
     asyncio.create_task(_recordatorios_scheduler())
 
 @app.on_event("shutdown")
