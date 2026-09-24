@@ -163,7 +163,7 @@ export default function ManageBookingPage() {
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="Ej. +34612345678"
+              placeholder="Tu teléfono"
               className="w-full p-3 border border-zinc-300 focus:outline-none focus:border-[#c57d62]"
             />
           </div>

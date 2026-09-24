@@ -68,7 +68,7 @@ export default function LoginPage() {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Usuario de administración"
+                placeholder="Tu usuario"
                 className="w-full pl-10 p-3 border border-zinc-300 focus:outline-none focus:border-[#c57d62] text-sm"
               />
             </div>
