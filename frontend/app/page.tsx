@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowDown, ArrowRight, Clock3, MapPin, Menu, X, ExternalLink, Star } from 'lucide-react'
 import { api, Service } from '@/lib/api'
+import { getServiceCategory } from '@/lib/utils'
 
 function InstagramIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -63,8 +64,8 @@ function Header({ onMenu }: { onMenu: () => void }) {
   return (
     <header className="absolute inset-x-0 top-0 z-20">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
-        <a href="/" className="flex items-center gap-3">
-          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-10 w-auto object-contain" />
+        <a href="/" className="flex items-center gap-3 bg-white/95 px-4 py-2 shadow-sm">
+          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-14 w-auto object-contain md:h-16" />
         </a>
         <nav className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 md:flex">
           <a href="#servicios" className="transition-colors hover:text-white">Servicios</a>
@@ -92,7 +93,6 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/20" />
       <div className="relative mx-auto w-full max-w-7xl px-6 lg:px-10">
         <div className="max-w-3xl text-white">
-          <img src="/logo.png" alt="ML Mimo Mento Logo" className="mb-6 h-20 w-auto object-contain md:h-32 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]" />
           <h1 className="font-serif text-5xl leading-[0.93] tracking-[-0.055em] md:text-7xl">
             Tu momento.<br />
             <em className="font-normal text-[#c57d62]">Tu belleza.</em><br />
