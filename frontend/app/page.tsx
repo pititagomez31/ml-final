@@ -92,10 +92,7 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/20" />
       <div className="relative mx-auto w-full max-w-7xl px-6 lg:px-10">
         <div className="max-w-3xl text-white">
-          <img src="/logo.png" alt="ML Mimo Mento Logo" className="mb-4 h-16 w-auto object-contain md:h-20" />
-          <p className="mb-6 text-[11px] font-semibold uppercase tracking-[0.3em] text-[#e7b4a1]">
-            ML MIMO MENTO NAILS STUDIO · TENERIFE
-          </p>
+          <img src="/logo.png" alt="ML Mimo Mento Logo" className="mb-6 h-20 w-auto object-contain md:h-32 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]" />
           <h1 className="font-serif text-5xl leading-[0.93] tracking-[-0.055em] md:text-7xl">
             Tu momento.<br />
             <em className="font-normal text-[#c57d62]">Tu belleza.</em><br />
@@ -135,7 +132,7 @@ function Services() {
   }, [])
 
   return (
-    <section id="servicios" className="bg-[#faf8f6] px-6 py-24 lg:px-10 lg:py-32">
+    <section id="servicios" className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Nuestros servicios"
@@ -187,7 +184,7 @@ function ManageBookingSection() {
   }
 
   return (
-    <section className="bg-[#faf8f6] border-t border-[#e8ddd6] px-6 py-20 lg:px-10 lg:py-28">
+    <section className="bg-[#faf8f6] border-t border-[#e8ddd6] px-6 py-14 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-4xl bg-white border border-[#e8ddd6] p-8 md:p-12 shadow-sm">
         <div className="text-center">
           <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c57d62]">Gestión de reservas</p>
@@ -237,10 +234,10 @@ function ManageBookingSection() {
 }
 
 function OurWork() {
-  const images = ['/trabajo1.svg', '/trabajo2.svg', '/trabajo3.svg', '/trabajo4.svg', '/trabajo5.svg', '/trabajo6.svg']
+  const images = ['/trabajo1.jpg', '/trabajo2.jpg', '/trabajo3.jpg', '/trabajo4.jpg', '/trabajo5.jpg', '/trabajo6.jpg']
 
   return (
-    <section className="bg-[#faf8f6] px-6 py-24 lg:px-10 lg:py-32 border-t border-[#e8ddd6]">
+    <section className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20 border-t border-[#e8ddd6]">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Galería"
@@ -265,7 +262,7 @@ function OurWork() {
 
 function TeamProfessional() {
   return (
-    <section id="equipo" className="bg-[#e8ddd6] px-6 py-24 lg:px-10 lg:py-32">
+    <section id="equipo" className="bg-[#e8ddd6] px-6 py-14 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Nuestra profesional"
@@ -291,7 +288,7 @@ function TeamProfessional() {
 
 function LocationSection() {
   return (
-    <section id="contacto" className="bg-[#faf8f6] px-6 py-24 lg:px-10 lg:py-28">
+    <section id="contacto" className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Ubicación"
@@ -333,7 +330,7 @@ function LocationSection() {
 
 function GoogleReviewsSection() {
   return (
-    <section className="bg-white border-t border-[#e8ddd6] px-6 py-20 lg:px-10 text-center">
+    <section className="bg-white border-t border-[#e8ddd6] px-6 py-14 lg:px-10 lg:py-20 text-center">
       <div className="mx-auto max-w-2xl">
         <div className="inline-flex items-center justify-center gap-1 mb-4 text-[#c57d62]">
           {[...Array(5)].map((_, i) => (
@@ -361,7 +358,7 @@ function GoogleReviewsSection() {
 
 function SocialFollowSection() {
   return (
-    <section className="bg-[#faf8f6] border-t border-[#e8ddd6] px-6 py-20 lg:px-10 text-center">
+    <section className="bg-[#faf8f6] border-t border-[#e8ddd6] px-6 py-14 lg:px-10 lg:py-20 text-center">
       <div className="mx-auto max-w-2xl">
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c57d62]">Comunidad</p>
         <h2 className="font-serif text-3xl md:text-4xl text-[#38312d]">Síguenos</h2>
