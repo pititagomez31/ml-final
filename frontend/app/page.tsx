@@ -88,7 +88,7 @@ function Header({ onMenu }: { onMenu: () => void }) {
 
 function Hero() {
   return (
-    <section id="inicio" className="relative flex min-h-[880px] items-end overflow-hidden bg-[#5d4a42] pb-16 md:min-h-[960px] md:pb-24">
+    <section id="inicio" className="relative flex min-h-[880px] items-center overflow-hidden bg-[#5d4a42] pb-16 md:min-h-[960px] md:pb-24">
       <img src="/images/hero-spa.png" alt="ML Mimo Mento Nails Studio" className="absolute inset-0 size-full object-cover object-center opacity-80" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/20" />
       <div className="relative mx-auto w-full max-w-7xl px-6 lg:px-10">
