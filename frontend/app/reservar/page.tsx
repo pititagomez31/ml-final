@@ -7,6 +7,8 @@ import { Calendar, Clock, User, CheckCircle, ArrowLeft, AlertCircle, Phone, Mail
 
 const CATEGORY_ORDER = ['Manicura', 'Pedicura', 'Gel y Acrílico', 'Retoques', 'Otros'];
 
+const NEUMORPHIC_BUTTON = 'rounded-full bg-[#faf8f6] text-[#c57d62] shadow-[5px_5px_12px_rgba(92,72,62,0.24),-5px_-5px_12px_rgba(255,255,255,0.7)] transition duration-200 hover:shadow-[-3px_-3px_8px_rgba(92,72,62,0.18),3px_3px_8px_rgba(255,255,255,0.55)] active:shadow-[inset_3px_3px_7px_rgba(92,72,62,0.22),inset_-3px_-3px_7px_rgba(255,255,255,0.7)]';
+
 function groupServicesByCategory(list: Service[]) {
   const groups: Record<string, Service[]> = {};
   for (const service of list) {
@@ -154,16 +156,16 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-[#faf8f6] text-zinc-900 pb-20">
       {/* Top Bar */}
-      <header className="bg-[#38312d] text-white py-6 px-6 shadow-md">
+      <header className="bg-[#38312d] text-white py-3 px-6 shadow-md">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <a href="/" className="font-serif text-2xl tracking-tight">
-            ML Mimo Mento Nails Studio<span className="text-[#c57d62]">.</span>
+          <a href="/" className="flex items-center">
+            <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-16 w-auto object-contain" />
           </a>
           <a
             href="/gestionar"
-            className="text-xs uppercase tracking-widest bg-[#c57d62] px-4 py-2 hover:bg-[#ae684f] transition"
+            className={`${NEUMORPHIC_BUTTON} px-4 py-2 text-xs font-semibold uppercase tracking-widest`}
           >
-            Gestionar cita
+            Modificar mi cita
           </a>
         </div>
       </header>
@@ -227,9 +229,21 @@ export default function BookingPage() {
                           {svc.description && (
                             <p className="text-xs text-zinc-500 mb-3">{svc.description}</p>
                           )}
-                          <p className="text-xs text-zinc-400 flex items-center gap-1">
-                            <Clock className="size-3.5" /> {svc.duration_min} min
-                          </p>
+                          <div className="flex items-center justify-between gap-4">
+                            <p className="text-xs text-zinc-400 flex items-center gap-1">
+                              <Clock className="size-3.5" /> {svc.duration_min} min
+                            </p>
+                            <button
+                              type="button"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleServiceSelect(svc);
+                              }}
+                              className={`${NEUMORPHIC_BUTTON} px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em]`}
+                            >
+                              Reservar
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
