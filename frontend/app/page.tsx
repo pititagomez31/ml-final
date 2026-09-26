@@ -305,7 +305,7 @@ function TeamProfessional() {
         />
         <div className="mt-14 grid gap-10 md:grid-cols-2 md:items-center">
           <div className="aspect-[4/5] overflow-hidden bg-[#faf8f6] border border-white/40 shadow-sm">
-            <img src="/dore.svg" alt="Dorelitz" className="size-full object-cover object-center" />
+            <img src="/dore.jpg" alt="Dorelitz" className="size-full object-cover object-center" />
           </div>
           <div className="flex flex-col justify-center">
             <h3 className="font-serif text-4xl text-[#38312d]">Dorelitz</h3>
