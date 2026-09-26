@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowDown, ArrowRight, Clock3, MapPin, Menu, X, ExternalLink, Star } from 'lucide-react'
 import { api, Service } from '@/lib/api'
@@ -64,8 +64,8 @@ function Header({ onMenu }: { onMenu: () => void }) {
   return (
     <header className="absolute inset-x-0 top-0 z-20">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
-        <a href="/" className="flex items-center gap-3 bg-white/95 px-4 py-2 shadow-sm">
-          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-14 w-auto object-contain md:h-16" />
+        <a href="/" className="flex items-center gap-3">
+          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-20 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] md:h-24" />
         </a>
         <nav className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 md:flex">
           <a href="#servicios" className="transition-colors hover:text-white">Servicios</a>
@@ -102,7 +102,10 @@ function Hero() {
             Descubre una experiencia de belleza diseñada para que te sientas tan bien como te ves.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a href="/reservar" className="group inline-flex items-center gap-5 bg-[#c57d62] px-6 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-[#ae684f]">
+            <a
+              href="/reservar"
+              className="group inline-flex items-center gap-5 rounded-full bg-[#c57d62] px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-white shadow-[6px_6px_14px_rgba(0,0,0,0.35),-4px_-4px_12px_rgba(255,255,255,0.15),inset_1px_1px_2px_rgba(255,255,255,0.3)] transition duration-300 hover:bg-[#ae684f] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.35),-2px_-2px_8px_rgba(255,255,255,0.1),inset_2px_2px_6px_rgba(0,0,0,0.25)] active:scale-[0.98]"
+            >
               Reservar mi cita <ArrowRight className="transition-transform group-hover:translate-x-1" />
             </a>
             <a href="#servicios" className="inline-flex items-center gap-3 px-3 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/90 transition hover:text-white">
@@ -115,6 +118,49 @@ function Hero() {
         </div>
       </div>
     </section>
+  )
+}
+
+const CATEGORY_ORDER = ['Manicura', 'Pedicura', 'Gel y Acrílico', 'Retoques', 'Otros']
+
+function groupServicesByCategory(list: Service[]) {
+  const groups: Record<string, Service[]> = {}
+  for (const service of list) {
+    const category = getServiceCategory(service.name)
+    if (!groups[category]) groups[category] = []
+    groups[category].push(service)
+  }
+  return CATEGORY_ORDER
+    .filter((category) => groups[category]?.length)
+    .map((category) => ({ category, items: groups[category] }))
+}
+
+function ServiceCard({ service }: { service: Service }) {
+  return (
+    <article className="flex flex-col justify-between rounded-2xl bg-[#faf8f6] p-6 shadow-[8px_8px_18px_#e2d6cc,-8px_-8px_18px_#ffffff] transition duration-300 hover:shadow-[4px_4px_10px_#e2d6cc,-4px_-4px_10px_#ffffff]">
+      <div>
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="font-serif text-xl font-medium text-[#38312d]">{service.name}</h3>
+          <span className="shrink-0 rounded-full bg-[#faf8f6] px-3 py-1 font-serif text-base font-semibold text-[#c57d62] shadow-[inset_2px_2px_5px_#e2d6cc,inset_-2px_-2px_5px_#ffffff]">
+            {service.price_eur}€
+          </span>
+        </div>
+        {service.description && (
+          <p className="mt-2 text-sm text-zinc-500">{service.description}</p>
+        )}
+        <p className="mt-4 flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-zinc-400">
+          <Clock3 className="size-3.5" /> {formatDuration(service.duration_min)}
+        </p>
+      </div>
+      <div className="mt-6 flex justify-end">
+        <a
+          href={`/reservar?service=${service.id}`}
+          className="inline-flex items-center gap-2 rounded-full bg-[#faf8f6] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#c57d62] shadow-[4px_4px_10px_#e2d6cc,-4px_-4px_10px_#ffffff] transition duration-300 hover:text-[#38312d] hover:shadow-[inset_3px_3px_7px_#e2d6cc,inset_-3px_-3px_7px_#ffffff]"
+        >
+          Reservar <ArrowRight className="size-3.5" />
+        </a>
+      </div>
+    </article>
   )
 }
 
@@ -131,6 +177,8 @@ function Services() {
       .catch(() => {})
   }, [])
 
+  const categorized = useMemo(() => groupServicesByCategory(serviceList), [serviceList])
+
   return (
     <section id="servicios" className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-7xl">
@@ -139,32 +187,18 @@ function Services() {
           title="Nuestros servicios"
           copy="Cada tratamiento está pensado para regalarte un momento de cuidado, calma y expresión personal."
         />
-        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {serviceList.map((service) => (
-            <article key={service.id || service.name} className="flex flex-col justify-between border border-[#e8ddd6] bg-white p-6 transition duration-300 hover:shadow-md">
-              <div>
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className="font-serif text-xl font-medium text-[#38312d]">{service.name}</h3>
-                  <span className="shrink-0 bg-[#f5e9e3] px-3 py-1 font-serif text-base font-semibold text-[#c57d62]">
-                    {service.price_eur}€
-                  </span>
-                </div>
-                {service.description && (
-                  <p className="mt-2 text-sm text-zinc-500">{service.description}</p>
-                )}
-                <p className="mt-4 flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-zinc-400">
-                  <Clock3 className="size-3.5" /> {formatDuration(service.duration_min)}
-                </p>
+        <div className="mt-16 space-y-14">
+          {categorized.map(({ category, items }) => (
+            <div key={category}>
+              <h3 className="mb-6 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c57d62]">
+                <span className="h-px w-8 bg-[#c57d62]/40" /> {category}
+              </h3>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {items.map((service) => (
+                  <ServiceCard key={service.id || service.name} service={service} />
+                ))}
               </div>
-              <div className="mt-6 pt-4 border-t border-zinc-100 flex justify-end">
-                <a
-                  href={`/reservar?service=${service.id}`}
-                  className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#c57d62] transition hover:text-[#38312d]"
-                >
-                  Reservar <ArrowRight className="size-3.5" />
-                </a>
-              </div>
-            </article>
+            </div>
           ))}
         </div>
       </div>
