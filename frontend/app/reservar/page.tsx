@@ -1,8 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { api, Service, BusinessInfo } from '@/lib/api';
+import { getServiceCategory } from '@/lib/utils';
 import { Calendar, Clock, User, CheckCircle, ArrowLeft, AlertCircle, Phone, Mail, Scissors } from 'lucide-react';
+
+const CATEGORY_ORDER = ['Manicura', 'Pedicura', 'Gel y Acrílico', 'Retoques', 'Otros'];
+
+function groupServicesByCategory(list: Service[]) {
+  const groups: Record<string, Service[]> = {};
+  for (const service of list) {
+    const category = getServiceCategory(service.name);
+    if (!groups[category]) groups[category] = [];
+    groups[category].push(service);
+  }
+  return CATEGORY_ORDER
+    .filter((category) => groups[category]?.length)
+    .map((category) => ({ category, items: groups[category] }));
+}
 
 export default function BookingPage() {
   const [step, setStep] = useState<number>(1);
@@ -134,6 +149,8 @@ export default function BookingPage() {
     { id: 'equipo-ml', name: 'Especialista ML', role: 'Estilista & Nail Artist Especialista' },
   ];
 
+  const categorizedServices = useMemo(() => groupServicesByCategory(services), [services]);
+
   return (
     <div className="min-h-screen bg-[#faf8f6] text-zinc-900 pb-20">
       {/* Top Bar */}
@@ -188,25 +205,34 @@ export default function BookingPage() {
             ) : services.length === 0 ? (
               <p className="text-zinc-500 text-sm">No hay servicios disponibles por el momento.</p>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2">
-                {services.map((svc) => (
-                  <div
-                    key={svc.id}
-                    onClick={() => handleServiceSelect(svc)}
-                    className="p-5 bg-white border border-zinc-200 hover:border-[#c57d62] cursor-pointer transition shadow-sm hover:shadow"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-serif text-lg font-bold">{svc.name}</h3>
-                      <span className="font-semibold text-[#c57d62]">
-                        {svc.price_eur > 0 ? `${svc.price_eur} €` : 'Consultar'}
-                      </span>
+              <div className="space-y-10">
+                {categorizedServices.map(({ category, items }) => (
+                  <div key={category}>
+                    <h3 className="mb-4 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c57d62]">
+                      <span className="h-px w-8 bg-[#c57d62]/40" /> {category}
+                    </h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {items.map((svc) => (
+                        <div
+                          key={svc.id}
+                          onClick={() => handleServiceSelect(svc)}
+                          className="rounded-2xl bg-[#faf8f6] p-5 cursor-pointer transition duration-300 shadow-[8px_8px_18px_#e2d6cc,-8px_-8px_18px_#ffffff] hover:shadow-[4px_4px_10px_#e2d6cc,-4px_-4px_10px_#ffffff]"
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className="font-serif text-lg font-bold">{svc.name}</h3>
+                            <span className="shrink-0 rounded-full bg-[#faf8f6] px-3 py-1 font-semibold text-[#c57d62] shadow-[inset_2px_2px_5px_#e2d6cc,inset_-2px_-2px_5px_#ffffff]">
+                              {svc.price_eur > 0 ? `${svc.price_eur} €` : 'Consultar'}
+                            </span>
+                          </div>
+                          {svc.description && (
+                            <p className="text-xs text-zinc-500 mb-3">{svc.description}</p>
+                          )}
+                          <p className="text-xs text-zinc-400 flex items-center gap-1">
+                            <Clock className="size-3.5" /> {svc.duration_min} min
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                    {svc.description && (
-                      <p className="text-xs text-zinc-500 mb-3">{svc.description}</p>
-                    )}
-                    <p className="text-xs text-zinc-400 flex items-center gap-1">
-                      <Clock className="size-3.5" /> {svc.duration_min} min
-                    </p>
                   </div>
                 ))}
               </div>
