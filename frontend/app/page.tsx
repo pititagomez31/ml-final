@@ -320,6 +320,55 @@ function TeamProfessional() {
   )
 }
 
+function CollaborationArianna() {
+  return (
+    <section className="bg-[#e8ddd6] px-6 py-14 lg:px-10 lg:py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-10 md:grid-cols-2 md:items-center">
+          <div className="aspect-[4/5] overflow-hidden bg-[#faf8f6] border border-white/40 shadow-sm">
+            <img src="/arianna.jpg" alt="Arianna" className="size-full object-cover object-center" />
+          </div>
+          <div className="flex flex-col justify-center">
+            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c57d62]">En colaboración con</p>
+            <h2 className="font-serif text-4xl leading-[1.05] tracking-[-0.03em] text-[#38312d] md:text-5xl">Arianna</h2>
+            <p className="mt-2 text-sm text-zinc-500">Nail Artist</p>
+            <p className="mt-6 text-base leading-relaxed text-zinc-700">
+              Arianna se une a nuestro estudio como Nail Artist colaboradora, aportando su mirada fresca y su técnica precisa. Apasionada por el diseño y la perfección, complementa nuestra propuesta con un estilo propio. Su agenda está disponible miércoles, jueves y viernes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function GalleryArianna() {
+  const images = ['/trabajo8.jpg', '/trabajo9.jpg', '/trabajo10.jpg', '/trabajo11.jpg', '/trabajo12.jpg', '/trabajo13.jpg']
+
+  return (
+    <section className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20 border-t border-[#e8ddd6]">
+      <div className="mx-auto max-w-7xl">
+        <SectionIntro
+          eyebrow="Galería"
+          title="Trabajos de Arianna"
+          copy="Diseños y detalles realizados en colaboración con Arianna."
+        />
+        <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3">
+          {images.map((img, index) => (
+            <div key={img} className="gallery-reveal aspect-square overflow-hidden bg-[#e8ddd6]">
+              <img
+                src={img}
+                alt={`Trabajo de Arianna ${index + 1}`}
+                className="size-full object-cover transition duration-500 hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function LocationSection() {
   return (
     <section id="contacto" className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
@@ -467,6 +516,8 @@ export default function Page() {
       <ManageBookingSection />
       <OurWork />
       <TeamProfessional />
+      <CollaborationArianna />
+      <GalleryArianna />
       <LocationSection />
       <GoogleReviewsSection />
       <SocialFollowSection />
