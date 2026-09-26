@@ -137,7 +137,7 @@ function groupServicesByCategory(list: Service[]) {
 
 function ServiceCard({ service }: { service: Service }) {
   return (
-    <article className="flex flex-col justify-between rounded-2xl bg-[#faf8f6] p-6 shadow-[8px_8px_18px_#e2d6cc,-8px_-8px_18px_#ffffff] transition duration-300 hover:shadow-[4px_4px_10px_#e2d6cc,-4px_-4px_10px_#ffffff]">
+    <article className="service-card flex flex-col justify-between rounded-2xl bg-[#faf8f6] p-6 shadow-[8px_8px_18px_#e2d6cc,-8px_-8px_18px_#ffffff] transition duration-300 hover:shadow-[4px_4px_10px_#e2d6cc,-4px_-4px_10px_#ffffff]">
       <div>
         <div className="flex items-start justify-between gap-4">
           <h3 className="font-serif text-xl font-medium text-[#38312d]">{service.name}</h3>
@@ -180,7 +180,7 @@ function Services() {
   const categorized = useMemo(() => groupServicesByCategory(serviceList), [serviceList])
 
   return (
-    <section id="servicios" className="scroll-reveal bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
+    <section id="servicios" className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Nuestros servicios"
