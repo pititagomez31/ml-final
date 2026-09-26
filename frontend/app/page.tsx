@@ -180,7 +180,7 @@ function Services() {
   const categorized = useMemo(() => groupServicesByCategory(serviceList), [serviceList])
 
   return (
-    <section id="servicios" className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
+    <section id="servicios" className="scroll-reveal bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Nuestros servicios"
@@ -271,7 +271,7 @@ function OurWork() {
   const images = ['/trabajo1.jpg', '/trabajo2.jpg', '/trabajo3.jpg', '/trabajo4.jpg', '/trabajo5.jpg', '/trabajo6.jpg']
 
   return (
-    <section className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20 border-t border-[#e8ddd6]">
+    <section className="scroll-reveal bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20 border-t border-[#e8ddd6]">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Galería"
