@@ -65,7 +65,7 @@ function Header({ onMenu }: { onMenu: () => void }) {
     <header className="absolute inset-x-0 top-0 z-20">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
         <a href="/" className="flex items-center gap-3">
-          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-20 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] md:h-24" />
+          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-24 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] md:h-28" />
         </a>
         <nav className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 md:flex">
           <a href="#servicios" className="transition-colors hover:text-white">Servicios</a>
