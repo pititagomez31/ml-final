@@ -74,10 +74,21 @@ export interface Service {
   active: boolean;
 }
 
+export interface Professional {
+  id: string;
+  name: string;
+  active: boolean;
+  working_days: number[];
+  start: string;
+  end: string;
+}
+
 export interface Appointment {
   id: string;
   service_id: string;
   service_name: string;
+  professional_id?: string;
+  professional_name?: string;
   price_eur: number;
   duration_min: number;
   date: string;
@@ -99,6 +110,7 @@ export interface Appointment {
 export interface AvailabilityResponse {
   date: string;
   service_id: string;
+  professional_id?: string;
   duration_min: number;
   slots: string[];
 }
@@ -109,6 +121,7 @@ export interface BusinessInfo {
   whatsapp: string;
   address: string;
   barber_name: string;
+  professionals?: string[];
 }
 
 export interface Blocker {
@@ -155,6 +168,7 @@ export const api = {
 
   // Services
   getServices: (all = false) => request<Service[]>(`/services${all ? '?all=true' : ''}`),
+  getProfessionals: () => request<Professional[]>('/professionals'),
   createService: (data: Partial<Service>) =>
     request<Service>('/services', { method: 'POST', body: JSON.stringify(data) }),
   updateService: (id: string, data: Partial<Service>) =>
@@ -163,8 +177,10 @@ export const api = {
     request<{ ok: boolean }>(`/services/${id}`, { method: 'DELETE' }),
 
   // Availability & Schedule
-  getAvailability: (serviceId: string, date: string) =>
-    request<AvailabilityResponse>(`/availability?service_id=${encodeURIComponent(serviceId)}&date=${encodeURIComponent(date)}`),
+  getAvailability: (serviceId: string, date: string, professionalId: string = 'dorelitz') =>
+    request<AvailabilityResponse>(
+      `/availability?service_id=${encodeURIComponent(serviceId)}&date=${encodeURIComponent(date)}&professional_id=${encodeURIComponent(professionalId)}`
+    ),
   getDaySchedule: (date: string) => request<DaySchedule>(`/day-schedule/${date}`),
   getWorkingHours: () => request<WorkingHours>('/working-hours'),
   setWorkingHours: (days: any) =>
@@ -201,10 +217,12 @@ export const api = {
     booker_name?: string;
     accepted_policy: boolean;
     opt_in_whatsapp: boolean;
-  }) => request<Appointment>('/appointments', { method: 'POST', body: JSON.stringify(data) }),
+    professional_id?: string;
+  }) => request<Appointment>('/appointments', { method: 'POST', body: JSON.stringify({ professional_id: 'dorelitz', ...data }) }),
 
   forceAppointment: (data: {
     service_id: string;
+    professional_id?: string;
     date: string;
     start: string;
     client_name: string;
@@ -232,10 +250,10 @@ export const api = {
       method: 'POST',
     }),
 
-  modificarAppointment: (id: string, phone: string, date: string, start: string) =>
+  modificarAppointment: (id: string, phone: string, date: string, start: string, professionalId?: string) =>
     request<Appointment>(`/appointments/${id}/modificar`, {
       method: 'POST',
-      body: JSON.stringify({ phone, date, start }),
+      body: JSON.stringify({ phone, date, start, professional_id: professionalId }),
     }),
 
   cancelAppointmentByAdmin: (id: string) =>

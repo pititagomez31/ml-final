@@ -271,7 +271,7 @@ function OurWork() {
   const images = ['/trabajo1.jpg', '/trabajo2.jpg', '/trabajo3.jpg', '/trabajo4.jpg', '/trabajo5.jpg', '/trabajo6.jpg']
 
   return (
-    <section className="scroll-reveal bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20 border-t border-[#e8ddd6]">
+    <section className="bg-[#faf8f6] px-6 py-14 lg:px-10 lg:py-20 border-t border-[#e8ddd6]">
       <div className="mx-auto max-w-7xl">
         <SectionIntro
           eyebrow="Galería"
@@ -280,7 +280,7 @@ function OurWork() {
         />
         <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-3">
           {images.map((img, index) => (
-            <div key={index} className="aspect-square overflow-hidden bg-[#e8ddd6]">
+            <div key={index} className="gallery-reveal aspect-square overflow-hidden bg-[#e8ddd6]">
               <img
                 src={img}
                 alt={`Trabajo ML Mimo Mento ${index + 1}`}
