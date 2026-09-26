@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { api, Service, BusinessInfo } from '@/lib/api';
+import { api, Service, BusinessInfo, Professional } from '@/lib/api';
 import { getServiceCategory } from '@/lib/utils';
 import { Calendar, Clock, User, CheckCircle, ArrowLeft, AlertCircle, Phone, Mail, Scissors } from 'lucide-react';
 
@@ -24,16 +24,13 @@ function groupServicesByCategory(list: Service[]) {
 export default function BookingPage() {
   const [step, setStep] = useState<number>(1);
   const [services, setServices] = useState<Service[]>([]);
+  const [professionals, setProfessionals] = useState<Professional[]>([]);
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo | null>(null);
   const [loadingServices, setLoadingServices] = useState(true);
 
   // Selection states
   const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [selectedProfessional, setSelectedProfessional] = useState<{ id: string; name: string; role: string }>({
-    id: 'equipo-ml',
-    name: 'Especialista ML',
-    role: 'Estilista / Nail Artist',
-  });
+  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split('T')[0]
   );
@@ -58,18 +55,15 @@ export default function BookingPage() {
   useEffect(() => {
     async function loadInitial() {
       try {
-        const [svcs, bInfo] = await Promise.all([
+        const [svcs, pros, bInfo] = await Promise.all([
           api.getServices(),
+          api.getProfessionals(),
           api.getBusinessInfo().catch(() => null),
         ]);
         setServices(svcs);
+        setProfessionals(pros);
         if (bInfo) {
           setBusinessInfo(bInfo);
-          setSelectedProfessional({
-            id: 'equipo-ml',
-            name: 'Especialista ML',
-            role: 'Estilista / Nail Artist',
-          });
         }
       } catch (err: any) {
         setErrorMsg('Error al cargar servicios. Verifica que el servidor backend esté en ejecución.');
@@ -82,11 +76,11 @@ export default function BookingPage() {
 
   // Fetch slots when service or date changes
   useEffect(() => {
-    if (selectedService && selectedDate) {
+    if (selectedService && selectedDate && selectedProfessional) {
       setLoadingSlots(true);
       setErrorMsg('');
       api
-        .getAvailability(selectedService.id, selectedDate)
+        .getAvailability(selectedService.id, selectedDate, selectedProfessional.id)
         .then((res) => {
           setSlots(res.slots || []);
         })
@@ -96,14 +90,16 @@ export default function BookingPage() {
         })
         .finally(() => setLoadingSlots(false));
     }
-  }, [selectedService, selectedDate]);
+  }, [selectedService, selectedDate, selectedProfessional]);
 
   const handleServiceSelect = (svc: Service) => {
     setSelectedService(svc);
+    setSelectedProfessional(null);
+    setSelectedSlot('');
     setStep(2);
   };
 
-  const handleProfessionalSelect = (pro: { id: string; name: string; role: string }) => {
+  const handleProfessionalSelect = (pro: Professional) => {
     setSelectedProfessional(pro);
     setSelectedSlot('');
     setStep(3);
@@ -111,7 +107,7 @@ export default function BookingPage() {
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedService || !selectedSlot) return;
+    if (!selectedService || !selectedProfessional || !selectedSlot) return;
     if (!acceptedPolicy) {
       setErrorMsg('Debes aceptar la política del 50%.');
       return;
@@ -136,6 +132,7 @@ export default function BookingPage() {
         booker_name: bookerName.trim() || undefined,
         accepted_policy: acceptedPolicy,
         opt_in_whatsapp: optInWhatsapp,
+        professional_id: selectedProfessional.id,
       });
 
       setCreatedAppointment(appt);
@@ -146,10 +143,6 @@ export default function BookingPage() {
       setSubmitting(false);
     }
   };
-
-  const professionals = [
-    { id: 'equipo-ml', name: 'Especialista ML', role: 'Estilista & Nail Artist Especialista' },
-  ];
 
   const categorizedServices = useMemo(() => groupServicesByCategory(services), [services]);
 
@@ -292,7 +285,9 @@ export default function BookingPage() {
                   </div>
                   <div>
                     <h3 className="font-serif text-lg font-bold">{pro.name}</h3>
-                    <p className="text-xs text-zinc-500">{pro.role}</p>
+                    <p className="text-xs text-zinc-500">
+                      {pro.id === 'dorelitz' ? 'L–V' : 'Mi–Vi'} {pro.start}–{pro.end}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -516,7 +511,7 @@ export default function BookingPage() {
             <CheckCircle className="size-16 text-emerald-600 mx-auto mb-4" />
             <h2 className="font-serif text-3xl font-bold mb-2">¡Reserva Confirmada!</h2>
             <p className="text-zinc-600 text-sm mb-6">
-              Tu cita se ha registrado con éxito. Te esperamos en ML Mimo Mento Nails Studio con {selectedProfessional.name}.
+              Tu cita se ha registrado con éxito. Te esperamos en ML Mimo Mento Nails Studio con {createdAppointment.professional_name || selectedProfessional?.name}.
             </p>
 
             <div className="bg-[#faf8f6] p-6 border border-zinc-200 text-left max-w-md mx-auto mb-8 space-y-3 text-sm">
@@ -532,7 +527,7 @@ export default function BookingPage() {
               </div>
               <div>
                 <span className="text-xs text-zinc-400 uppercase block">Profesional</span>
-                <span className="font-medium">{selectedProfessional.name}</span>
+                <span className="font-medium">{createdAppointment.professional_name || selectedProfessional?.name}</span>
               </div>
               <div>
                 <span className="text-xs text-zinc-400 uppercase block">Fecha y Hora</span>

@@ -202,12 +202,49 @@ button, a { -webkit-tap-highlight-color: transparent; }
     animation-timeline: view();
     animation-range: entry 10% cover 35%;
   }
+
+  .gallery-reveal {
+    animation: gallery-reveal-left linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  .gallery-reveal:nth-child(even) {
+    animation-name: gallery-reveal-right;
+  }
 }
 
 @supports not (animation-timeline: view()) {
   .scroll-reveal > div {
     opacity: 1;
     transform: none;
+  }
+
+  .gallery-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gallery-reveal-left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes gallery-reveal-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 767px) {
+  @keyframes gallery-reveal-left {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes gallery-reveal-right {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 }
 
