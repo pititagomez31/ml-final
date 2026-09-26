@@ -63,9 +63,9 @@ function SectionIntro({ eyebrow, title, copy, light = false }: { eyebrow: string
 function Header({ onMenu }: { onMenu: () => void }) {
   return (
     <header className="absolute inset-x-0 top-0 z-20">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10 lg:py-6">
         <a href="/" className="flex items-center gap-3">
-          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-24 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] md:h-28" />
+          <img src="/logo.png" alt="ML Mimo Mento Nails Studio" className="h-48 w-auto object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)] md:h-56" />
         </a>
         <nav className="hidden items-center gap-8 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80 md:flex">
           <a href="#servicios" className="transition-colors hover:text-white">Servicios</a>
@@ -88,7 +88,7 @@ function Header({ onMenu }: { onMenu: () => void }) {
 
 function Hero() {
   return (
-    <section id="inicio" className="relative flex min-h-[720px] items-end overflow-hidden bg-[#5d4a42] pb-16 md:min-h-[800px] md:pb-24">
+    <section id="inicio" className="relative flex min-h-[880px] items-end overflow-hidden bg-[#5d4a42] pb-16 md:min-h-[960px] md:pb-24">
       <img src="/images/hero-spa.png" alt="ML Mimo Mento Nails Studio" className="absolute inset-0 size-full object-cover object-center opacity-80" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/20" />
       <div className="relative mx-auto w-full max-w-7xl px-6 lg:px-10">
